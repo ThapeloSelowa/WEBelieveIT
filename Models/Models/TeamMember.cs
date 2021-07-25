@@ -16,7 +16,7 @@ namespace ModelLibrary.Models
         public string Mobile { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public string Member_ID { get; set; }
+        public string Member_No  { get; set; }
 
     }
 }

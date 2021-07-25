@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SharedModels.DataBaseEntities
+namespace ModelLibrary.Models
 {
-    public class ModelLibrary.Models 
+    public class System_Audits
     {
         public int Id { get; set; }
         public string User { get; set; }
