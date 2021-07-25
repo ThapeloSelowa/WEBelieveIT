@@ -12,11 +12,11 @@ namespace TaskManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamMembesController : ControllerBase
+    public class TeamMembersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public TeamMembesController(ApplicationDbContext context)
+        public TeamMembersController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -73,7 +73,7 @@ namespace TaskManagementAPI.Controllers
 
         [HttpGet]
         [Route("GetTeamMemberByMemberNo/{MemberNo}")]
-        public async Task<ActionResult<TeamMember>> GetTeamMemberByMemberNo(string MemberNo)
+        public async Task<ActionResult<TeamMember>> GetTeamMemberByMemberNo(int MemberNo)
         {
             try
             {
@@ -110,8 +110,7 @@ namespace TaskManagementAPI.Controllers
                 var lastteamMember = await _context.TeamMembers.OrderBy(x=>x.Id).LastOrDefaultAsync();
                 if (lastteamMember != null) {
                     //Separating employee no flag and actual value
-                    var lastNoString = lastteamMember.Member_No.Substring(2);
-                    var lastNoValue = Convert.ToInt32(lastNoString) + 1;
+                    var lastNoValue = lastteamMember.Member_No + 1;
                     return lastNoValue;
                 }
                 return 1001;
@@ -180,6 +179,8 @@ namespace TaskManagementAPI.Controllers
         {
             try
             {
+ 
+                teamMember.Member_No = GetNextAvailableMemberNumber().Result.Value;
                 _context.TeamMembers.Add(teamMember);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("GetTeamMember", new { id = teamMember.Id }, teamMember);

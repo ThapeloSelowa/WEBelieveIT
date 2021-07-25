@@ -21,14 +21,14 @@ namespace TaskManagementAPI.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ErrorLog>>> GetError_Logs()
+        [HttpGet][Route("GetErrorLog")]
+        public async Task<ActionResult<IEnumerable<ErrorLog>>> GetErrorLog()
         {
             return await _context.Error_Logs.ToListAsync();
         }
 
         [HttpPost]
-        public async Task<ActionResult<ErrorLog>> PostError_Logs(ErrorLog error_Logs)
+        public async Task<ActionResult<ErrorLog>> PostErrorLog(ErrorLog error_Logs)
         {
             _context.Error_Logs.Add(error_Logs);
             await _context.SaveChangesAsync();

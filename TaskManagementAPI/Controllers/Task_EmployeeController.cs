@@ -106,7 +106,7 @@ namespace TaskManagementAPI.Controllers
 
         [HttpGet]
         [Route("GetTeamMemberTasksByMemberNo/{memberNo}")]
-        public async Task<ActionResult<List<Task>>> GetTeamMemberTasksByMemberNo(string memberNo)
+        public async Task<ActionResult<List<Task>>> GetTeamMemberTasksByMemberNo(int memberNo)
         {
             try
             {

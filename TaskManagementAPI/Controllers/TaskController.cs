@@ -22,7 +22,7 @@ namespace TaskManagementAPI.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet][Route("GetTasks")]
         public async Task<ActionResult<IEnumerable<Task>>> GetTasks()
         {
             try { 
@@ -36,7 +36,7 @@ namespace TaskManagementAPI.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet][Route("GetTask/{id}")]
         public async Task<ActionResult<Task>> GetTask(int id)
         {
             try { 

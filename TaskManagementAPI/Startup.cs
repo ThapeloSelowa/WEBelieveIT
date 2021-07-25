@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using TaskManagementAPI.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.OpenApi.Models;
 
 namespace TaskManagementAPI
 {
@@ -26,6 +26,11 @@ namespace TaskManagementAPI
             services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("WeBelieveITDb"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WEBelieve IT Web API", Version = "version1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +46,17 @@ namespace TaskManagementAPI
             }
 
             app.UseHttpsRedirection();
+
             app.UseMvc();
+
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WEBelieve IT Web API");
+            });
         }
     }
 }
