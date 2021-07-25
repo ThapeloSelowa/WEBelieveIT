@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
 using TaskManagementAPI.Data;
+using Task = ModelLibrary.Models.Task;
 
 namespace TaskManagementAPI.Controllers
 {
@@ -232,6 +233,20 @@ namespace TaskManagementAPI.Controllers
         private bool TeamMemberExists(int id)
         {
             return _context.TeamMembers.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        [Route("GetTeamMemberTasksByMemberId/{MemberId}")]
+        public async Task<ActionResult<List<Task>>> GetTeamMemberTasksByMemberId(int MemberId)
+        {
+            return await new Task_TeamMemberController(_context).GetTeamMemberTasksByMemberId(MemberId);
+        }
+
+        [HttpGet]
+        [Route("GetTeamMemberTasksByMemberNo/{memberNo}")]
+        public async Task<ActionResult<List<Task>>> GetTeamMemberTasksByMemberNo(int memberNo)
+        {
+            return await new Task_TeamMemberController(_context).GetTeamMemberTasksByMemberNo(memberNo);
         }
     }
 }

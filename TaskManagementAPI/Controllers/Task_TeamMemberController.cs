@@ -65,8 +65,8 @@ namespace TaskManagementAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetTeamMemberTasksById/{MemberId}")]
-        public async Task<ActionResult<List<Task>>> GetTeamMemberTasksById(int MemberId)
+        [Route("GetTeamMemberTasksByMemberId/{MemberId}")]
+        public async Task<ActionResult<List<Task>>> GetTeamMemberTasksByMemberId(int MemberId)
         {
             try
             {
@@ -147,8 +147,8 @@ namespace TaskManagementAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetTaskTeamMemberByTaskId/{taskId}")]
-        public async Task<ActionResult<List<TeamMember>>> GetTaskTeamMemberByTaskId(int taskId)
+        [Route("GetTaskTeamMembersByTaskId/{taskId}")]
+        public async Task<ActionResult<List<TeamMember>>> GetTaskTeamMembersByTaskId(int taskId)
         {
             try
             {
@@ -157,16 +157,16 @@ namespace TaskManagementAPI.Controllers
                 {
                     return NotFound();
                 }
-                List<TeamMember> employees = new List<TeamMember>();
+                List<TeamMember> teamMembers = new List<TeamMember>();
                 foreach (var empId in emps)
                 {
                     var emp = _context.TeamMembers.Find(empId.Member_Id);
                     if (emp != null)
                     {
-                        employees.Add(emp);
+                        teamMembers.Add(emp);
                     }
                 }
-                return employees;
+                return teamMembers;
             }
             catch (Exception ex)
             {

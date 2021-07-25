@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ModelLibrary.Models;
 using TaskManagementAPI.Data;
 using Task = ModelLibrary.Models.Task;
 
@@ -22,36 +23,40 @@ namespace TaskManagementAPI.Controllers
         }
 
 
-        [HttpGet][Route("GetTasks")]
+        [HttpGet]
+        [Route("GetTasks")]
         public async Task<ActionResult<IEnumerable<Task>>> GetTasks()
         {
-            try { 
-            return await _context.Tasks.ToListAsync();
+            try
+            {
+                return await _context.Tasks.ToListAsync();
             }
             catch (Exception ex)
             {
-               
+
                 return StatusCode(500);
             }
         }
 
 
-        [HttpGet][Route("GetTask/{id}")]
+        [HttpGet]
+        [Route("GetTask/{id}")]
         public async Task<ActionResult<Task>> GetTask(int id)
         {
-            try { 
-            var tasks = await _context.Tasks.FindAsync(id);
-
-            if (tasks == null)
+            try
             {
-                return NotFound();
-            }
+                var tasks = await _context.Tasks.FindAsync(id);
 
-            return tasks;
+                if (tasks == null)
+                {
+                    return NotFound();
+                }
+
+                return tasks;
             }
             catch (Exception ex)
             {
-               
+
                 return StatusCode(500);
             }
         }
@@ -59,35 +64,36 @@ namespace TaskManagementAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(int id, Task task)
         {
-            try { 
-            if (id != task.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(task).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskExists(id))
+                if (id != task.Id)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                _context.Entry(task).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TaskExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
             }
             catch (Exception ex)
             {
-               
+
                 return StatusCode(500);
             }
         }
@@ -105,7 +111,7 @@ namespace TaskManagementAPI.Controllers
             }
             catch (Exception ex)
             {
-              
+
                 return StatusCode(500);
             }
 
@@ -115,21 +121,22 @@ namespace TaskManagementAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Task>> DeleteTask(int id)
         {
-            try { 
-            var tasks = await _context.Tasks.FindAsync(id);
-            if (tasks == null)
+            try
             {
-                return NotFound();
-            }
+                var tasks = await _context.Tasks.FindAsync(id);
+                if (tasks == null)
+                {
+                    return NotFound();
+                }
 
-            _context.Tasks.Remove(tasks);
-            await _context.SaveChangesAsync();
+                _context.Tasks.Remove(tasks);
+                await _context.SaveChangesAsync();
 
-            return tasks;
+                return tasks;
             }
             catch (Exception ex)
             {
-               
+
                 return StatusCode(500);
             }
         }
@@ -138,5 +145,15 @@ namespace TaskManagementAPI.Controllers
         {
             return _context.Tasks.Any(e => e.Id == id);
         }
+
+
+        [HttpGet]
+        [Route("GetTaskTeamMembersByTaskId/{taskId}")]
+        public async Task<ActionResult<List<TeamMember>>> GetTaskTeamMembersByTaskId(int taskId)
+        {
+            return await new Task_TeamMemberController(_context).GetTaskTeamMembersByTaskId(taskId);
+        }
+
     }
 }
+
